@@ -1,0 +1,9 @@
+Problems to solve
+
+1. Bounding box around car spots calculated once for a given camera (model 1)
+2. Bounding outline on cars, calculated per frame (model 2)
+3. ID for each car park and its state
+4. Mapping a car to its car spot (may need to be a seperate model 3) 
+5. Calculate time car spot is used for, update database when state changes
+6. Send notification to phone app if car violates car spot rules
+7. Dashboard in app with the state of each car park
