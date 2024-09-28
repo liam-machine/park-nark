@@ -2,7 +2,7 @@ import cv2
 from ultralytics import YOLO
 
 # Load YOLOv8 model
-model = YOLO("yolov9s.pt")
+model = YOLO("yolov8s.pt")
 
 # Define the video source
 source = './videos/park-1.mp4'
