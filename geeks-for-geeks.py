@@ -27,7 +27,7 @@ video_cap = cv2.VideoCapture("./videos/park-1.mp4")  # Initialize the video capt
 output_filename = os.path.join(output_dir, "output.mp4")  # Path to save the output video
 writer = create_video_writer(video_cap, output_filename)  # Initialize the video writer object to save the processed video
 
-model = YOLO("yolov8n.pt")  # Load the pre-trained YOLOv8n model
+model = YOLO("yolov8s.pt")  # Load the pre-trained YOLOv8n model
 tracker = DeepSort(max_age=30)  # Initialize the DeepSORT tracker
 
 frame_count = 0  # Initialize frame count for skipping frames
