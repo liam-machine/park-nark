@@ -3,7 +3,7 @@ from ultralytics import YOLO  # Library for loading and using the YOLO model
 import cv2  # OpenCV library for image and video processing
 import os  # Library for interacting with the operating system
 from deep_sort_realtime.deepsort_tracker import DeepSort  # Library for the DeepSORT tracker
-
+import torch 
 def create_video_writer(video_cap, output_filename):
     # Function to create a video writer object for saving the output video
     frame_width = int(video_cap.get(cv2.CAP_PROP_FRAME_WIDTH))
@@ -24,8 +24,15 @@ if not os.path.exists(output_dir):
     os.makedirs(output_dir)
 
 video_cap = cv2.VideoCapture("./videos/park-1.mp4")  # Initialize the video capture object to read the video
-output_filename = os.path.join(output_dir, "output.mp4")  # Path to save the output video
+output_filename = os.path.join(output_dir, "output-no-resize.mp4")  # Path to save the output video
 writer = create_video_writer(video_cap, output_filename)  # Initialize the video writer object to save the processed video
+
+# Check if a GPU is available and set the device accordingly
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+print(f"Using device: {device}")
+
+# Load YOLOv8 model with the correct device
+model = YOLO("yolov8s.pt").to(device)
 
 model = YOLO("yolov8s.pt")  # Load the pre-trained YOLOv8n model
 tracker = DeepSort(max_age=30)  # Initialize the DeepSORT tracker
@@ -43,7 +50,7 @@ while True:
         continue
 
     # Resize the frame for faster YOLO processing (reducing the frame size by 50%)
-    frame_resized = cv2.resize(frame, (640, 360))
+    frame_resized = frame #cv2.resize(frame, (640, 360))
 
     start = datetime.datetime.now()  # Record the start time
 
