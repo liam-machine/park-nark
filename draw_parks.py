@@ -1,3 +1,4 @@
+import json
 import cv2
 import numpy as np
 
@@ -55,22 +56,27 @@ while True:
     # Update the window
     cv2.imshow("image", img)
     key = cv2.waitKey(50)
-
     # Save the polygon when 'd' is pressed
     if key == ord('d') and len(points) > 2:
         # Save the polygon coordinates to file
-        file.write(f"Polygon {polygon_count}:\n")
-        for point in points:
-            file.write(f"{point[0]},{point[1]}\n")
-        file.write("\n")
+        polygon_data = {
+            "polygon_id": polygon_count,
+            "points": points
+        }
+
+        # Write the polygon data to the JSON file
+        with open("polygon_coords.json", "a") as json_file:
+            json.dump(polygon_data, json_file)
+            json_file.write("\n")
 
         # Save the polygon to the list of polygons
         polygons.append(points.copy())
 
-        print(f"Polygon {polygon_count} saved to file and displayed.")
+        print(f"Polygon {polygon_count} saved to JSON file and displayed.")
         polygon_count += 1
         points = []  # Reset points to allow drawing a new polygon
         done = False
+  
 
     # Exit and close the file when 'q' is pressed
     if key == ord('q'):
