@@ -42,7 +42,9 @@ while cap.isOpened():
             # Draw the tracking lines
             points = np.hstack(track).astype(np.int32).reshape((-1, 1, 2))
             cv2.polylines(annotated_frame, [points], isClosed=False, color=(230, 230, 230), thickness=10)
-
+            # Calculate and display the frame rate
+            fps = cap.get(cv2.CAP_PROP_FPS)
+            cv2.putText(annotated_frame, f"FPS: {fps:.2f}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
         # Display the annotated frame
         cv2.imshow("YOLO11 Tracking", annotated_frame)
 
