@@ -5,9 +5,9 @@ from ultralytics import YOLO
 import time
 import json
 
-# Load polygon coordinates from JSON file
+# Load polygon coordinates from JSON file, 
 with open('polygon_coords.json', 'r') as f:
-    polygons = [json.loads(line) for line in f]
+    carParks = [json.loads(line) for line in f]
 
 # Load the YOLO11 model
 model = YOLO("yolo11n.pt")
@@ -69,8 +69,8 @@ while cap.isOpened():
         cv2.putText(annotated_frame, f"FPS: {fps:.2f}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
 
         # Overlay polygons and centroids on the frame
-        for polygon in polygons:
-            points = np.array(polygon['points'], np.int32)
+        for carPark in carParks:
+            points = np.array(carPark['points'], np.int32)
             points = points.reshape((-1, 1, 2))
             cv2.polylines(annotated_frame, [points], isClosed=True, color=(0, 255, 0), thickness=1)
 
@@ -80,7 +80,7 @@ while cap.isOpened():
                 cx = int(M['m10'] / M['m00'])
                 cy = int(M['m01'] / M['m00'])
                 cv2.circle(annotated_frame, (cx, cy), 5, (0, 0, 255), -1)
-                cv2.putText(annotated_frame, f"ID: {polygon['polygon_id']}", (cx, cy), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+                cv2.putText(annotated_frame, f"ID: {carPark['polygon_id']}", (cx, cy), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
         
         # Write the annotated frame to the output video
         out.write(annotated_frame)
