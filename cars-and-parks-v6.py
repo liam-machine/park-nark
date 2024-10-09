@@ -30,7 +30,15 @@ out = cv2.VideoWriter(output_video_path, fourcc, fps, (frame_width, frame_height
 # Store the track history
 track_history = defaultdict(lambda: [])
 
-def find_closest_carpark(car_park_centroids, car_centroid, search_radius=100):
+def adjust_park_centroid(y_poistion):
+    focal_length = 3.6
+    distance=3
+    hieght = 2.5
+    y_change=(focal_length*hieght)/distance
+    adjusted_y_position=y_poistion+y_change
+    return adjusted_y_position
+
+def find_closest_carpark(car_park_centroids, car_centroids, search_radius=10):
     """
     Find the closest car park centroid to a given car centroid within a search radius.
     
@@ -42,19 +50,35 @@ def find_closest_carpark(car_park_centroids, car_centroid, search_radius=100):
     Returns:
     tuple: The closest car park centroid to the car centroid.
     """
-    cx, cy = car_centroid
-    closest_centroid = None
-    min_distance = float('inf')
     
+    
+    parks=[]
+    cars=[]
     for car_park_centroid in car_park_centroids:
         car_park_cx, car_park_cy = car_park_centroid
-        if abs(car_park_cx - cx) <= search_radius and abs(car_park_cy - cy) <= search_radius:
-            dist = distance.euclidean(car_centroid, car_park_centroid)
-            if dist < min_distance:
-                min_distance = dist
-                closest_centroid = car_park_centroid
+        closest_centroid = None
+        min_distance = float('inf')
+        
+        for car_centroid in car_centroids:
+            cx, cy = car_centroid
+            if abs(car_park_cx - cx) <= search_radius and abs(car_park_cy - cy) <= search_radius:
+                dist = distance.euclidean(car_centroid, car_park_centroid)
+                if dist < min_distance:
+                    min_distance = dist
+                    closest_centroid = car_centroid
+        if closest_centroid:
+            print("distance: ",min_distance)
+            print("car: ",closest_centroid)
+            print("park: ",car_park_centroid)
+            parks.append(car_park_centroid)
+            cars.append(closest_centroid)
+    print("PARKS: ")
+    print(parks)
+
+    print("CARS: ")
+    print(cars)
     
-    return closest_centroid
+    return parks, cars
 
 # Loop through the video frames
 prev_time = time.time()
@@ -120,11 +144,13 @@ while cap.isOpened():
                 cv2.putText(annotated_frame, f"ID: {carPark['polygon_id']}", (cx, cy), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
 
         # Draw lines from car centroids to the closest car park centroid within the search radius
-        for car_centroid in car_centroids:
-            closest_car_park_centroid = find_closest_carpark(car_park_centroids, car_centroid, search_radius=100)
-            if closest_car_park_centroid:
-                cv2.line(annotated_frame, car_centroid, closest_car_park_centroid, (255, 255, 0), 2)
 
+        parks, cars = find_closest_carpark(car_park_centroids, car_centroids, search_radius=25)
+        for park, car in zip(parks, cars):
+            cv2.line(annotated_frame, car, park, (255, 255, 0), 2)
+
+
+        
         # Write the annotated frame to the output video
         out.write(annotated_frame)
 
