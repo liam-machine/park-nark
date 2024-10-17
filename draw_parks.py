@@ -86,3 +86,24 @@ while True:
 # Close the file and release resources
 file.close()
 cv2.destroyAllWindows()
+
+
+# 0 > 8m
+# 1 > 13.4m
+# 2 > ?
+# 3 > +5.4m
+# 4 > +5.4m
+# 5 > ?
+# 6 > +5.4m
+# 7 > +5.4m
+
+Adding point #0 with position(413,715)
+Adding point #1 with position(411,667)
+Adding point #2 with position(400,554)
+Adding point #3 with position(397,498)
+Adding point #4 with position(394,459)
+Adding point #5 with position(383,422)
+Adding point #6 with position(379,402)
+Adding point #7 with position(374,378)
+Adding point #8 with position(373,367)
+Adding point #9 with position(369,353)

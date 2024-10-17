@@ -43,3 +43,9 @@ plt.title('Comparison of Power Law, Quadratic, and Exponential Fits')
 plt.legend()
 plt.grid(True)
 plt.show()
+
+
+# calculate the hieght change
+# hieght of pixel shift = Hieght of object * focal length / Distance to object
+
+# 
