@@ -8,7 +8,7 @@ import json
 # Load polygon coordinates from JSON file, 
 with open('polygon_coords.json', 'r') as f:
     carParks = [json.loads(line) for line in f]
-
+print("hello wworld")
 # Load the YOLO11 model
 model = YOLO("yolo11n.pt")
 
